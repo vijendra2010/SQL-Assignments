@@ -1,4 +1,4 @@
-Creating the table CITY as per the given schema.
+Creating the table as per the given schema
 
 	create table city
 (
