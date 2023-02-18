@@ -61,3 +61,44 @@ SELECT name FROM city WHERE countrycode = "JPN";
 
 
 
+--Creating STATION table
+
+CREATE TABLE station
+(
+    id INT,
+    city VARCHAR(21),
+    state VARCHAR(2),
+    lat_n INT,
+    long_w INT
+);
+
+--Inserting the rows in STATION table
+
+INSERT INTO station VALUES(794,'Kissee Mills','MO',139,73),(824,'Loma Mar','CA',48,130)
+,(603,'Sandy Hook','CT',72,148),(478,'Tipton','IN',33,97),(619,'Arlington','CO',75,92)
+,(711,'Turner','AR',50,101),(839,'Slidell','LA',85,151),(411,'Negreet','LA',98,105)
+,(588,'Glencoe','KY',46,136),(665,'Chelsea','IA',98,59),(342,'Chignik Lagoon','AK',103,153)
+,(733,'Pelahatchie','MS',38,28),(811,'Dorrance','KS',102,121),(698,'Albany','CA',49,80)
+,(325,'Monument','KS',70,141),(414,'Manchester','MD',73,37),(113,'Prescott','IA',39,65)
+,(971,'Graettinger','IA',94,150),(266,'Cahone','CO',116,127);
+
+--Q7. Query a list of CITY and STATE from the STATION table.
+
+SELECT city, state FROM station;
+
+--Q8. Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, 
+--but exclude duplicates from the answer.
+
+SELECT DISTINCT(city) FROM station WHERE (id%2 = 0);
+
+--Q9. Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
+
+SELECT COUNT(city) - COUNT(DISTINCT(city)) AS diff_of_cities FROM station;
+
+--Q10. Query the two cities in STATION with the shortest and longest CITY names, as well as their
+--respective lengths (i.e.: number of characters in the name). If there is more than one smallest or
+--largest city, choose the one that comes first when ordered alphabetically.
+
+
+
+
