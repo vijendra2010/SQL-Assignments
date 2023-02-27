@@ -1,5 +1,4 @@
 --Creating the table "city"--
-
 create table city
 (
     id INT,
@@ -9,8 +8,8 @@ create table city
     population INT
 );
 
---Inserting the data in the "city" table--
 
+--Inserting the data in the "city" table--
 INSERT INTO city VALUES
 (6,	"Rotterdam", "NLD",	"Zuid-Holland", null),(19, "Zaanstad", "NLD",	"Noord-Holland", 135621),(214, "Porto Alegre", "BRA", "Rio Grande do Sul", 1314032),(397,	"Lauro de Freitas",	"BRA",	"Bahia",	109236),(547,	"Dobric"	,"BGR",	"Varna"	,100399),
 (552, "Bujumbura"	,"BDI"	,"Bujumbura",	300000),(554, "Santiago de Chile",	"CHL",	"Santiago",	4703954),(626,	"al-Minya",	"EGY",	"al-Minya",	201360),(646,	"Santa Ana",	"SLV",	"Santa Ana",	139389),(762,	"Bahir",	"Dar",	"ETH Amhara",	96140),(796,	"Baguio",	"PHL",	"CAR",	252386),
@@ -35,34 +34,31 @@ INSERT INTO city VALUES
 
 --Q1. Query all columns for all American cities in the CITY table with populations larger than 100000.
 --The CountryCode for America is USA.
-
 SELECT * FROM city WHERE countrycode = "USA" AND population > 100000;
+
 
 --Q2. Query the NAME field for all American cities in the CITY table with populations larger than 120000.
 --The CountryCode for America is USA.
-
 SELECT name FROM city WHERE countrycode = "USA" AND population > 120000;
 
---Q3. Query all columns (attributes) for every row in the CITY table.
 
+--Q3. Query all columns (attributes) for every row in the CITY table.
 SELECT * FROM city;
 
---Q4. Query all columns for a city in CITY with the ID 1661.
 
+--Q4. Query all columns for a city in CITY with the ID 1661.
 SELECT * FROM city WHERE id = 1661;
 
---Q5. Query all attributes of every Japanese city in the CITY table. The COUNTRYCODE for Japan is JPN.
 
+--Q5. Query all attributes of every Japanese city in the CITY table. The COUNTRYCODE for Japan is JPN.
 SELECT * FROM city WHERE countrycode = "JPN";
 
---Q6. Query the names of all the Japanese cities in the CITY table. The COUNTRYCODE for Japan is JPN.
 
+--Q6. Query the names of all the Japanese cities in the CITY table. The COUNTRYCODE for Japan is JPN.
 SELECT name FROM city WHERE countrycode = "JPN";
 
 
-
 --Creating STATION table
-
 CREATE TABLE station
 (
     id INT,
@@ -72,8 +68,8 @@ CREATE TABLE station
     long_w INT
 );
 
---Inserting the rows in STATION table
 
+--Inserting the rows in STATION table
 INSERT INTO station VALUES(794,'Kissee Mills','MO',139,73),(824,'Loma Mar','CA',48,130)
 ,(603,'Sandy Hook','CT',72,148),(478,'Tipton','IN',33,97),(619,'Arlington','CO',75,92)
 ,(711,'Turner','AR',50,101),(839,'Slidell','LA',85,151),(411,'Negreet','LA',98,105)
@@ -82,23 +78,29 @@ INSERT INTO station VALUES(794,'Kissee Mills','MO',139,73),(824,'Loma Mar','CA',
 ,(325,'Monument','KS',70,141),(414,'Manchester','MD',73,37),(113,'Prescott','IA',39,65)
 ,(971,'Graettinger','IA',94,150),(266,'Cahone','CO',116,127);
 
---Q7. Query a list of CITY and STATE from the STATION table.
 
+
+--Q7. Query a list of CITY and STATE from the STATION table.
 SELECT city, state FROM station;
+
+
 
 --Q8. Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, 
 --but exclude duplicates from the answer.
-
 SELECT DISTINCT(city) FROM station WHERE (id%2 = 0);
 
---Q9. Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
 
+--Q9. Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
 SELECT COUNT(city) - COUNT(DISTINCT(city)) AS diff_of_cities FROM station;
+
 
 --Q10. Query the two cities in STATION with the shortest and longest CITY names, as well as their
 --respective lengths (i.e.: number of characters in the name). If there is more than one smallest or
 --largest city, choose the one that comes first when ordered alphabetically.
 
+--The below query check the shortest city alphabatically, output will be city_name and shortest_city_name
+SELECT city AS city_name, LENGTH(city) AS shortest_city_name FROM station ORDER BY LENGTH(city), city LIMIT 1;
 
-
+--The below query returns the city_name and the longest_city_name
+SELECT city AS city_name, LENGTH(city) AS longest_city_name FROM station ORDER BY LENGTH(city) DESC, city LIMIT 1;
 
