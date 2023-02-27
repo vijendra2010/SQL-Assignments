@@ -119,4 +119,13 @@ SELECT city FROM station WHERE LOWER(SUBSTR(city,1,1)) NOT IN ('a', 'e', 'i', 'o
 
 
 --Q14. Query the list of CITY names from STATION that do not end with vowels. Your result cannot contain duplicates.
+SELECT city FROM station WHERE SUBSTR(city,LENGTH(city)) NOT IN ('a', 'e', 'i', 'o', 'u');
+
+
+--Q15. Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.
+SELECT city FROM station WHERE SUBSTR(city, 1, 1) NOT IN ('a', 'e', 'i', 'o', 'u')
+OR SUBSTR(city, LENGTH(city)) NOT IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT DISTINCT(city) FROM station WHERE city NOT REGEXP '^[aeiou]' OR city NOT REGEXP '[aeiou]$';
+
 
