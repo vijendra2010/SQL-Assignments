@@ -144,7 +144,8 @@ SELECT DISTINCT(city) FROM station WHERE city NOT REGEXP '^[aeiou]' AND city NOT
 
 --Q17. Creating product table and sales table and entering values in them.
 
-CREATE TABLE product
+--Create Product table
+CREATE TABLE Product
 (
     product_id INT,
     product_name VARCHAR(20),
@@ -152,7 +153,8 @@ CREATE TABLE product
     CONSTRAINT pk PRIMARY KEY (product_id)
 );
 
-CREATE TABLE sales
+--Create Sales table
+CREATE TABLE Sales
 (
     seller_id INT,
     product_id INT,
@@ -163,6 +165,7 @@ CREATE TABLE sales
     CONSTRAINT fk FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
+--Insert records into Product and Sales table
 INSERT INTO product VALUES(1, "S8", 1000), (2, "G4", 800), (3, "iPhone", 1400); 
 SELECT * FROM product;
 
@@ -173,5 +176,61 @@ SELECT * FROM sales;
 
 --Write an SQL query that reports the products that were only sold in the first quarter of 2019. That is,between 2019-01-01 and 2019-03-31 inclusive.
 --Return the result table in any order.
+
+SELECT product_id, product_name FROM Product
+WHERE product_id NOT IN (  
+    SELECT product_id FROM Sales WHERE sale_date 
+    NOT BETWEEN '2019-01-01' AND '2019-03-31'
+); 
+
+
+
+--Q18. There is no primary key for this table, it may have duplicate rows.
+--Each row of this table indicates that some viewer viewed an article (written by some author) on some date.
+--Note that equal author_id and viewer_id indicate the same person.
+
+--Create Views table
+CREATE TABLE Views(
+    article_id INT,
+    author_id INT,
+    viewer_id INT,
+    view_date DATE
+);
+
+--Insert records into Views
+INSERT INTO Views VALUES (1, 3, 5, "2019-08-01"), 
+(1, 3, 6, "2019-08-02"),(2, 7, 7, "2019-08-01"),
+(2, 7, 6, "2019-08-02"),(4, 7, 1, "2019-07-22"),
+(3, 4, 4, "2019-07-21"),(3, 4, 4, "2019-07-21");
+
+
+--Write an SQL query to find all the authors that viewed at least one of their own articles.
+--Return the result table sorted by id in ascending order.
+--Distinct author_id of those authos that have visited their own article atleast once.
+SELECT DISTINCT author_id FROM Views
+WHERE author_id = viewer_id ORDER BY author_id ASC; 
+
+
+
+--Q19. delivery_id is the primary key of this table.
+--The table holds information about food delivery to customers that make orders at some date and
+--specify a preferred delivery date (on the same order date or after it).
+--If the customer's preferred delivery date is the same as the order date, then the order is called
+--immediately; otherwise, it is called scheduled.
+--Write an SQL query to find the percentage of immediate orders in the table, rounded to 2 decimal places.
+
+--Create delivery table
+CREATE TABLE delivery (
+    delivery_id INT NOT NULL,
+    customer_id INT,
+    order_date DATE,
+    customer_pref_delivery_date DATE,
+    CONSTRAINT pk PRIMARY KEY (delivery_id)
+);
+
+
+
+
+
 
 
