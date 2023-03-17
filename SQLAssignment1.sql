@@ -228,6 +228,16 @@ CREATE TABLE delivery (
     CONSTRAINT pk PRIMARY KEY (delivery_id)
 );
 
+SELECT ROUND( 
+    100*(
+        SELECT COUNT(*) FROM delivery
+        WHERE order_date = customer_pref_delivery_date
+    )/COUNT(*), 2
+ )
+FROM delivery;
+
+
+
 
 
 
