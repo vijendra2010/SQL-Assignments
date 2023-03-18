@@ -238,6 +238,53 @@ FROM delivery;
 
 
 
+--Q20. (ad_id, user_id) is the primary key for this table.
+--Each row of this table contains the ID of an Ad, the ID of a user, and the action taken by this user
+--regarding this Ad.
+--The action column is an ENUM type of ('Clicked', 'Viewed', 'Ignored').
+--A company is running Ads and wants to calculate the performance of each Ad.
+--Performance of the Ad is measured using Click-Through Rate (CTR) where:
+
+--Create ads table
+CREATE TABLE ads (
+    ad_id INT,
+    user_id INT,
+    action enum("Clicked", "Viewed", "Ignored"),
+    CONSTRAINT pk PRIMARY KEY (ad_id, user_id)
+);
+
+--Insert records
+INSERT INTO ads VALUES
+(1, 1, "Clicked"),
+(2, 2, "Clicked"),
+(3, 3, "Viewed"),
+(5, 5, "Ignored"),
+(1, 7, "Ignored"),
+(2, 7, "Viewed"),
+(3, 5, "Clicked"),
+(1, 4, "Viewed"),
+(2, 11, "Viewed"),
+(1, 2, "Clicked");
+
+--Query solution
+--In the below query we check if the action is Ignored (when else returns null) then we assign the value 0 in ctr
+SELECT ad_id,
+IFNULL(
+    ROUND(
+        AVG(
+            CASE
+                WHEN action = "Clicked" THEN 1
+                WHEN action = "Viewed" THEN 0
+                ELSE null
+            END
+        ) * 100,
+    2),    
+0) 
+AS ctr 
+FROM ads
+GROUP BY ad_id
+ORDER BY ctr DESC, ad_id ASC;
+
 
 
 
