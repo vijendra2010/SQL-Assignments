@@ -402,6 +402,40 @@ GROUP BY product_id;
 
 
 
+--Q24 (player_id, event_date) is the primary key of this table. This table shows the activity of players of some games.
+--Each row is a record of a player who logged in and played a number of games (possibly 0) before
+--logging out on someday using some device. Write an SQL query to report the first login date for each player.
+--Return the result table in any order. The query result format is in the following example.
+
+--Create the table Activity
+CREATE TABLE Activity (
+    player_id INT,
+    device_id INT,
+    event_date DATE,
+    games_played INT,
+    CONSTRAINT pk PRIMARY KEY (player_id, event_date)
+);
+
+--Insert records in the table Activity
+INSERT INTO Activity VALUES
+(1, 2, "2016-03-01", 5),
+(1, 2, "2016-05-02", 6),
+(2, 3, "2017-06-25", 1),
+(3, 1, "2016-03-02", 0),
+(3, 4, "2018-07-03", 5);
+
+--Solution
+--1. Find the ranks by partitioning the rows by player_id and ordering them by event_date
+--2. Then filter out the rows with rank = 1
+SELECT temp.player_id, temp.event_date AS first_login FROM
+(
+    SELECT *,
+        RANK() OVER(PARTITION BY player_id ORDER BY event_date) AS ranks
+    FROM Activity
+) AS temp WHERE temp.ranks = 1;
+
+
+
 
 
 
