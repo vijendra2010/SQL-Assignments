@@ -388,6 +388,18 @@ INSERT INTO UnitsSold VALUES
 (2, "2019-02-10", 200),
 (2, "2019-03-22", 30);
 
+--Solution
+--1. Join the two table.
+--2. Filter out the rows that have the purchase_date in between start_date and end_date.
+--3. Group the rows by product_id, SUM the avg and round off the value. 
+SELECT p.product_id, 
+ROUND(SUM(p.price * u.units)/SUM(u.units), 2)
+FROM Prices p INNER JOIN UnitsSold u
+ON p.product_id = u.product_id
+WHERE u.purchase_date >= p.start_date
+AND u.purchase_date <= p.end_date
+GROUP BY product_id; 
+
 
 
 
