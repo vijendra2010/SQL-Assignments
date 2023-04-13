@@ -435,9 +435,103 @@ SELECT temp.player_id, temp.event_date AS first_login FROM
 ) AS temp WHERE temp.ranks = 1;
 
 
+--Q25. (player_id, event_date) is the primary key of this table.
+--This table shows the activity of players of some games.
+--Each row is a record of a player who logged in and played a number of games (possibly 0) before
+--logging out on someday using some device.
+--Write an SQL query to report the device that is first logged in for each player.
+--Return the result table in any order.
+
+SELECT temp.player_id, temp.device_id FROM
+(SELECT *, RANK()
+OVER(PARTITION BY player_id ORDER BY event_date) AS rank_
+FROM Activity) temp
+WHERE temp.rank_ = 1;
 
 
+--Q26. product_id is the primary key for this table. This table contains data about the company's products.
+--There is no primary key for this table. It may have duplicate rows. product_id is a foreign key to the Products table.
+--unit is the number of products ordered in order_date.
+--Write an SQL query to get the names of products that have at least 100 units ordered in February 2020 and their amount.
+--Return result table in any order.
+
+CREATE TABLE Product(
+    product_id INT,
+    product_name VARCHAR(30),
+    product_category VARCHAR(30),
+    CONSTRAINT pk PRIMARY KEY (product_id)
+);
+
+CREATE TABLE Orders(
+    product_id INT,
+    order_date DATE,
+    unit INT
+);
+
+INSERT INTO Product VALUES
+(1, 'Leetcode Solutions', 'Book'),
+(2, 'Jewels of Stringology', 'Book'),
+(3, 'HP', 'Laptop'),
+(4, 'Lenovo', 'Laptop'),
+(5, 'Leetcode Kit', 'T-shirt');
+SELECT * FROM Product;
+
+INSERT INTO Orders VALUES
+(1, '2020-02-05', 60),
+(1, '2020-02-10', 70),
+(2, '2020-01-18', 30),
+(2, '2020-02-11', 80),
+(3, '2020-02-17', 2),
+(3, '2020-02-24', 3),
+(4, '2020-03-01', 20),
+(4, '2020-03-04', 30),
+(4, '2020-03-04', 60),
+(5, '2020-02-25', 50),
+(5, '2020-02-27', 50),
+(5, '2020-03-01', 50);
+SELECT * FROM Orders;
+
+SELECT a.product_name, SUM(unit) FROM Product AS a INNER JOIN Orders AS b
+ON a.product_id = b.product_id
+WHERE b.order_date BETWEEN '2020-02-01' AND '2020-02-29'
+GROUP BY a.product_id
+HAVING SUM(unit) >= 100;
 
 
+--Q27. user_id is the primary key for this table. This table contains information of the users signed up in a website. Some emails are invalid.
+--Write an SQL query to find the users who have valid emails.A valid e-mail has a prefix name and a domain where:
+-- ● The prefix name is a string that may contain letters (upper or lower case), digits, underscore '_', period '.', and/or dash '-'. 
+-- The prefix name must start with a letter.
+-- ● The domain is '@leetcode.com'. Return the result table in any order. The query result format is in the following example.
+
+CREATE TABLE Users(
+    user_id INT,
+    name VARCHAR(30),
+    mail VARCHAR(30),
+    CONSTRAINT pk PRIMARY KEY (user_id)
+);
+
+INSERT INTO Users VALUES
+(1, 'Winston', 'winston@leetcode.com'),
+(2, 'Jonathan', 'jonathanisgreat'),
+(3, 'Annabelle', 'bella-@leetcode.com'),
+(4, 'Sally', 'sally.come@leetcode.com'),
+(5, 'Marwan', 'quarz#2020@leetcode.com'),
+(6, 'David', 'david69@gmail.com'),
+(7, 'Shapiro', '.shapo@leetcode.com');
+
+SELECT * FROM Users;
+
+SELECT * FROM Users
+WHERE REGEXP_LIKE (mail, '^[a-zA-Z][a-zA-Z0-9\_\.\-]*@leetcode.com');
+
+
+--Q28. customer_id is the primary key for this table.This table contains information about the customers in the company.
+--product_id is the primary key for this table. This table contains information on the products in the company. price is the product cost.
+--order_id is the primary key for this table. This table contains information on customer orders.
+--customer_id is the id of the customer who bought "quantity" products with id "product_id".
+--Order_date is the date in format ('YYYY-MM-DD') when the order was shipped.
+--Write an SQL query to report the customer_id and customer_name of customers who have spent at least $100 in each month of June and July 2020.
+--Return the result table in any order.
 
 
