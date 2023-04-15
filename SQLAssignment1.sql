@@ -534,4 +534,60 @@ WHERE REGEXP_LIKE (mail, '^[a-zA-Z][a-zA-Z0-9\_\.\-]*@leetcode.com');
 --Write an SQL query to report the customer_id and customer_name of customers who have spent at least $100 in each month of June and July 2020.
 --Return the result table in any order.
 
+CREATE TABLE Customers (
+    customer_id INT,
+    name VARCHAR(30),
+    country VARCHAR(30),
+    CONSTRAINT pk PRIMARY KEY (customer_id)
+);
+
+CREATE TABLE Product (
+    product_id INT,
+    description VARCHAR(30),
+    price INT,
+    CONSTRAINT pk PRIMARY KEY (product_id)
+);
+
+CREATE TABLE Orders (
+    order_id INT,
+    customer_id INT,
+    product_id INT,
+    order_date DATE,
+    quantity INT,
+    CONSTRAINT pk PRIMARY KEY (order_id)
+);
+
+INSERT INTO Customers VALUES
+(1, 'Winston', 'USA'),
+(2, 'Jonathan', 'Peru'),
+(3, 'Moustafa', 'Egypt');
+
+INSERT INTO Product VALUES
+(10, 'LC Phone', 300),
+(20, 'LC T-Shirt', 10),
+(30, 'LC Book', 45),
+(40, 'LC Keychain', 2);
+
+INSERT INTO Orders VALUES
+(1, 1, 10, '2020-06-10', 1),
+(2, 1, 20, '2020-07-01', 1),
+(3, 1, 30, '2020-07-08', 2),
+(4, 2, 10, '2020-06-15', 2),
+(5, 2, 40, '2020-07-01', 10),
+(6, 3, 20, '2020-06-24', 2),
+(7, 3, 30, '2020-06-25', 2),
+(9, 3, 30, '2020-05-08', 3);
+
+SELECT c.customer_id, c.name FROM Customers c, Product p, Orders o
+WHERE p.product_id = o.product_id
+AND c.customer_id = o.customer_id
+GROUP BY c.customer_id
+HAVING 
+(
+    SUM(CASE WHEN o.order_date LIKE '2020-06%' THEN o.quantity*p.price ELSE 0 END) >= 100
+    AND 
+    SUM(CASE WHEN o.order_date LIKE '2020-07%' THEN o.quantity*p.price ELSE 0 END) >= 100
+);
+
+
 
